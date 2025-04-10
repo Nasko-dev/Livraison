@@ -30,9 +30,17 @@ class MyApp extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return CupertinoApp(
-      title: 'Livraison Pièces',
-      theme: themeProvider.theme,
-      home: const MainScreen(),
+      title: 'Livraison Pièce',
+      theme: themeProvider.isDarkMode
+          ? const CupertinoThemeData(
+              brightness: Brightness.dark,
+              primaryColor: CupertinoColors.systemBlue,
+            )
+          : const CupertinoThemeData(
+              brightness: Brightness.light,
+              primaryColor: CupertinoColors.systemBlue,
+            ),
+      home: const WelcomeScreen(),
     );
   }
 }

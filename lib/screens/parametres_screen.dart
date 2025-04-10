@@ -18,45 +18,48 @@ class _ParametresScreenState extends State<ParametresScreen> {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.4,
+        height: MediaQuery.of(context).size.height * 0.5,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: CupertinoTheme.of(context).scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        child: Column(
-          children: [
-            Container(
-              width: 40,
-              height: 5,
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                color: CupertinoColors.systemGrey5,
-                borderRadius: BorderRadius.circular(20),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 5,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: CupertinoColors.systemGrey5,
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
-            ),
-            Text(
-              'Choisir la langue',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: CupertinoTheme.of(context).textTheme.textStyle.color,
+              Text(
+                'Choisir la langue',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoTheme.of(context).textTheme.textStyle.color,
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            _buildLangueOption('Français'),
-            const Divider(),
-            _buildLangueOption('English'),
-            const Divider(),
-            _buildLangueOption('Español'),
-            const Divider(),
-            _buildLangueOption('Deutsch'),
-            const Spacer(),
-            CupertinoButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Fermer'),
-            ),
-          ],
+              const SizedBox(height: 24),
+              _buildLangueOption('Français'),
+              const Divider(),
+              _buildLangueOption('English'),
+              const Divider(),
+              _buildLangueOption('Español'),
+              const Divider(),
+              _buildLangueOption('Deutsch'),
+              const SizedBox(height: 16),
+              CupertinoButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Fermer'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -104,126 +107,136 @@ class _ParametresScreenState extends State<ParametresScreen> {
         middle: Text('Paramètres'),
       ),
       child: SafeArea(
-        child: ListView(
+        child: ListView.builder(
           padding: const EdgeInsets.all(16),
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: CupertinoTheme.of(context).barBackgroundColor,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: CupertinoColors.systemGrey.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Préférences',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          CupertinoTheme.of(context).textTheme.textStyle.color,
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: CupertinoTheme.of(context).barBackgroundColor,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: CupertinoColors.systemGrey.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildParametreItem(
-                    icon: CupertinoIcons.bell,
-                    title: 'Notifications',
-                    value: notifications,
-                    onChanged: (value) {
-                      setState(() {
-                        notifications = value;
-                      });
-                    },
-                  ),
-                  const Divider(),
-                  _buildParametreItem(
-                    icon: CupertinoIcons.moon,
-                    title: 'Mode sombre',
-                    value: themeProvider.isDarkMode,
-                    onChanged: (value) {
-                      themeProvider.toggleTheme();
-                    },
-                  ),
-                  const Divider(),
-                  _buildParametreItem(
-                    icon: CupertinoIcons.globe,
-                    title: 'Langue',
-                    value: null,
-                    onChanged: null,
-                    trailing: Text(
-                      langue,
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Préférences',
                       style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                         color: CupertinoTheme.of(context)
                             .textTheme
                             .textStyle
-                            .color
-                            ?.withOpacity(0.6),
+                            .color,
                       ),
                     ),
-                    onTap: _showLangueDialog,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: CupertinoTheme.of(context).barBackgroundColor,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: CupertinoColors.systemGrey.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'À propos',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          CupertinoTheme.of(context).textTheme.textStyle.color,
+                    const SizedBox(height: 16),
+                    _buildParametreItem(
+                      icon: CupertinoIcons.bell,
+                      title: 'Notifications',
+                      value: notifications,
+                      onChanged: (value) {
+                        setState(() {
+                          notifications = value;
+                        });
+                      },
                     ),
+                    const Divider(),
+                    _buildParametreItem(
+                      icon: CupertinoIcons.moon,
+                      title: 'Mode sombre',
+                      value: themeProvider.isDarkMode,
+                      onChanged: (value) {
+                        themeProvider.toggleTheme();
+                      },
+                    ),
+                    const Divider(),
+                    _buildParametreItem(
+                      icon: CupertinoIcons.globe,
+                      title: 'Langue',
+                      value: null,
+                      onChanged: null,
+                      trailing: Text(
+                        langue,
+                        style: TextStyle(
+                          color: CupertinoTheme.of(context)
+                              .textTheme
+                              .textStyle
+                              .color
+                              ?.withOpacity(0.6),
+                        ),
+                      ),
+                      onTap: _showLangueDialog,
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: CupertinoTheme.of(context).barBackgroundColor,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: CupertinoColors.systemGrey.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  _buildInfoItem(
-                    title: 'Version',
-                    value: '1.0.0',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'À propos',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: CupertinoTheme.of(context)
+                              .textTheme
+                              .textStyle
+                              .color,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _buildInfoItem(
+                        title: 'Version',
+                        value: '1.0.0',
+                      ),
+                      const Divider(),
+                      _buildInfoItem(
+                        title: 'Conditions d\'utilisation',
+                        value: null,
+                        onTap: () {
+                          // TODO: Naviguer vers les conditions d'utilisation
+                        },
+                      ),
+                      const Divider(),
+                      _buildInfoItem(
+                        title: 'Politique de confidentialité',
+                        value: null,
+                        onTap: () {
+                          // TODO: Naviguer vers la politique de confidentialité
+                        },
+                      ),
+                    ],
                   ),
-                  const Divider(),
-                  _buildInfoItem(
-                    title: 'Conditions d\'utilisation',
-                    value: null,
-                    onTap: () {
-                      // TODO: Naviguer vers les conditions d'utilisation
-                    },
-                  ),
-                  const Divider(),
-                  _buildInfoItem(
-                    title: 'Politique de confidentialité',
-                    value: null,
-                    onTap: () {
-                      // TODO: Naviguer vers la politique de confidentialité
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              );
+            }
+          },
         ),
       ),
     );
@@ -237,45 +250,81 @@ class _ParametresScreenState extends State<ParametresScreen> {
     Widget? trailing,
     VoidCallback? onTap,
   }) {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      onPressed: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: CupertinoColors.systemBlue.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                icon,
-                color: CupertinoColors.systemBlue,
-                size: 20,
+    return onTap != null
+        ? GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemBlue.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      icon,
+                      color: CupertinoColors.systemBlue,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color:
+                          CupertinoTheme.of(context).textTheme.textStyle.color,
+                    ),
+                  ),
+                  const Spacer(),
+                  if (value != null)
+                    CupertinoSwitch(
+                      value: value,
+                      onChanged: onChanged,
+                    )
+                  else if (trailing != null)
+                    trailing,
+                ],
               ),
             ),
-            const SizedBox(width: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                color: CupertinoTheme.of(context).textTheme.textStyle.color,
-              ),
+          )
+        : Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.systemBlue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: CupertinoColors.systemBlue,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: CupertinoTheme.of(context).textTheme.textStyle.color,
+                  ),
+                ),
+                const Spacer(),
+                if (value != null)
+                  CupertinoSwitch(
+                    value: value,
+                    onChanged: onChanged,
+                  )
+                else if (trailing != null)
+                  trailing,
+              ],
             ),
-            const Spacer(),
-            if (value != null)
-              CupertinoSwitch(
-                value: value,
-                onChanged: onChanged,
-              )
-            else if (trailing != null)
-              trailing,
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget _buildInfoItem({

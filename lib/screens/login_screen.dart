@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'home_screen.dart';
+import 'main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -117,17 +117,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const Spacer(),
               CupertinoButton.filled(
-                onPressed:
-                    _isValid
-                        ? () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                            CupertinoPageRoute(
-                              builder: (context) => const HomeScreen(),
-                            ),
-                            (route) => false,
-                          );
-                        }
-                        : null,
+                onPressed: _isValid
+                    ? () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => const MainScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    : null,
                 child: const Text('Se connecter'),
               ),
             ],
