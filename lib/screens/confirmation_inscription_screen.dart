@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import '../widgets/auth_header.dart';
 import '../models/inscription_requirements.dart';
+import '../providers/theme_provider.dart';
+import '../screens/welcome_screen.dart';
 
 class ConfirmationInscriptionScreen extends StatelessWidget {
   const ConfirmationInscriptionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
@@ -145,12 +149,52 @@ class ConfirmationInscriptionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 24),
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: themeProvider.isDarkMode
+                            ? CupertinoColors.darkBackgroundGray
+                            : CupertinoColors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: CupertinoColors.systemGrey4,
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.videocam,
+                              size: 40,
+                              color: CupertinoColors.systemGrey,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Vidéo explicative',
+                              style: TextStyle(
+                                color: CupertinoColors.systemGrey,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
                     const SizedBox(height: 32),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: CupertinoButton.filled(
                         onPressed: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const WelcomeScreen(),
+                            ),
+                            (route) => false,
+                          );
                         },
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         borderRadius: BorderRadius.circular(12),
@@ -163,7 +207,6 @@ class ConfirmationInscriptionScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
                   ],
                 ),
               ),

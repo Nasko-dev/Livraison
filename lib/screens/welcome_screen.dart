@@ -26,19 +26,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Column(
                 children: [
                   const SizedBox(height: 60),
-                  // Logo ou Icône
-                  Container(
+                  // Logo
+                  Image.asset(
+                    'assets/images/image.png',
                     width: 120,
                     height: 120,
-                    decoration: BoxDecoration(
-                      color: CupertinoColors.systemBlue,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Icon(
-                      CupertinoIcons.cube_box,
-                      size: 60,
-                      color: CupertinoColors.white,
-                    ),
                   ),
                   const SizedBox(height: 40),
                   const Text(

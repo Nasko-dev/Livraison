@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_map_caching/flutter_map_caching.dart';
 
 class CarteScreen extends StatefulWidget {
   const CarteScreen({super.key});
@@ -97,7 +96,6 @@ class _CarteScreenState extends State<CarteScreen> {
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.example.app',
-                  tileProvider: CachedTileProvider(),
                   maxZoom: 19,
                   minZoom: 5,
                 ),

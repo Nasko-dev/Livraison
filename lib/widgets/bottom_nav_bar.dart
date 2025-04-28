@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../screens/home_screen.dart';
@@ -26,46 +27,63 @@ class BottomNavBar extends StatelessWidget {
         color: themeProvider.isDarkMode
             ? CupertinoColors.darkBackgroundGray
             : CupertinoColors.systemBackground,
+        boxShadow: [
+          BoxShadow(
+            color: themeProvider.isDarkMode
+                ? CupertinoColors.black.withOpacity(0.2)
+                : CupertinoColors.systemGrey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: Offset(0, -2),
+          ),
+        ],
         border: Border(
           top: BorderSide(
             color: themeProvider.isDarkMode
-                ? CupertinoColors.darkBackgroundGray
+                ? CupertinoColors.darkBackgroundGray.withOpacity(0.8)
                 : CupertinoColors.systemGrey5,
             width: 0.5,
           ),
         ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
       ),
+      margin: EdgeInsets.only(top: 10),
       child: SafeArea(
         top: false,
+        left: false,
+        right: false,
         child: CupertinoTabBar(
           currentIndex: currentIndex,
           onTap: onTap,
-          backgroundColor: themeProvider.isDarkMode
-              ? CupertinoColors.darkBackgroundGray
-              : CupertinoColors.systemBackground,
+          backgroundColor: Colors.transparent,
           activeColor: CupertinoColors.systemBlue,
           inactiveColor: themeProvider.isDarkMode
               ? CupertinoColors.systemGrey
               : CupertinoColors.systemGrey,
+          iconSize: 24,
+          height: 60,
+          border: Border.all(color: Colors.transparent),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.home),
               label: 'Accueil',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.car),
-              label: 'Mes livraisons',
+              icon: Icon(CupertinoIcons.car_detailed),
+              label: 'Livraisons',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.money_dollar),
-              label: 'Ma cagnotte',
+              icon: Icon(CupertinoIcons.money_dollar_circle),
+              label: 'Cagnotte',
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.question_circle),
               label: 'Aide',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.person),
+              icon: Icon(CupertinoIcons.person_circle),
               label: 'Profil',
             ),
           ],

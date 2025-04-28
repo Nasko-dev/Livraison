@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/welcome_screen.dart';
-import 'theme/app_theme.dart';
+import 'screens/main_screen.dart';
+import 'screens/splash_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart'; // Import nécessaire
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'screens/mission_details_screen.dart';
-import 'screens/main_screen.dart';
 import 'package:provider/provider.dart';
 import 'providers/theme_provider.dart';
-import 'screens/home_screen.dart';
+import 'providers/auth_provider.dart';
+import 'providers/vehicle_provider.dart';
+import 'providers/balance_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   debugPaintSizeEnabled = false;
-  debugPaintBaselinesEnabled = false; // ajoute cette ligne
+  debugPaintBaselinesEnabled = false;
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => VehicleProvider()),
+        ChangeNotifierProvider(create: (_) => BalanceProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -27,21 +37,79 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
-    return CupertinoApp(
-      title: 'Livraison Pièce',
-      theme: themeProvider.isDarkMode
-          ? const CupertinoThemeData(
-              brightness: Brightness.dark,
-              primaryColor: CupertinoColors.systemBlue,
-            )
-          : const CupertinoThemeData(
-              brightness: Brightness.light,
-              primaryColor: CupertinoColors.systemBlue,
-            ),
-      home: const WelcomeScreen(),
+    return Consumer2<ThemeProvider, AuthProvider>(
+      builder: (context, themeProvider, authProvider, child) {
+        return CupertinoApp(
+          title: 'Livraison',
+          theme: const CupertinoThemeData(
+            primaryColor: CupertinoColors.systemBlue,
+            brightness: Brightness.light,
+          ),
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('fr', 'FR'),
+          ],
+          home: const AuthWrapper(),
+        );
+      },
     );
+  }
+}
+
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _checkAuthStatus());
+  }
+
+  Future<void> _checkAuthStatus() async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.checkAuthStatus();
+
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+      }
+    } catch (e) {
+      print('Erreur lors de la vérification du statut d\'authentification: $e');
+      if (mounted) {
+        setState(() {
+          _isInitialized = true; // On continue même en cas d'erreur
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_isInitialized) {
+      return const SplashScreen();
+    }
+
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    if (authProvider.isAuthenticated) {
+      return const MainScreen();
+    } else {
+      return const WelcomeScreen();
+    }
   }
 }
 

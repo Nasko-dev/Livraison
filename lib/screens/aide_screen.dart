@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/theme_provider.dart';
 
 class AideScreen extends StatefulWidget {
@@ -117,8 +118,31 @@ class _AideScreenState extends State<AideScreen> {
                     icon: CupertinoIcons.phone,
                     title: 'Support téléphonique',
                     subtitle: '01 23 45 67 89',
-                    onTap: () {
-                      // TODO: Implémenter l'appel téléphonique
+                    onTap: () async {
+                      final Uri launchUri = Uri(
+                        scheme: 'tel',
+                        path: '0123456789',
+                      );
+                      if (await canLaunchUrl(launchUri)) {
+                        await launchUrl(launchUri);
+                      } else {
+                        if (context.mounted) {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                              title: const Text('Erreur'),
+                              content: const Text(
+                                  'Impossible d\'ouvrir l\'application téléphone'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: const Text('OK'),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }
                     },
                   ),
                   const Divider(),
@@ -128,8 +152,35 @@ class _AideScreenState extends State<AideScreen> {
                     icon: CupertinoIcons.mail,
                     title: 'Email',
                     subtitle: 'support@livraison.com',
-                    onTap: () {
-                      // TODO: Implémenter l'envoi d'email
+                    onTap: () async {
+                      final Uri launchUri = Uri(
+                        scheme: 'mailto',
+                        path: 'support@livraison.com',
+                        queryParameters: {
+                          'subject': 'Support Livraison',
+                          'body': 'Bonjour,\n\n',
+                        },
+                      );
+                      if (await canLaunchUrl(launchUri)) {
+                        await launchUrl(launchUri);
+                      } else {
+                        if (context.mounted) {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (context) => CupertinoAlertDialog(
+                              title: const Text('Erreur'),
+                              content: const Text(
+                                  'Impossible d\'ouvrir l\'application email'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: const Text('OK'),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }
                     },
                   ),
                 ],

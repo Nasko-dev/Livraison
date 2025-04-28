@@ -17,12 +17,15 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+
+  // Création des écrans avec des clés de navigateur independantes
+  // pour préserver l'état de chaque écran
   final List<Widget> _screens = [
-    const HomeScreen(),
-    const MesLivraisonsScreen(),
-    const MaCagnotteScreen(),
-    const AideScreen(),
-    const ProfilScreen(),
+    const HomeScreen(key: PageStorageKey('home')),
+    const MesLivraisonsScreen(key: PageStorageKey('livraisons')),
+    const MaCagnotteScreen(key: PageStorageKey('cagnotte')),
+    const AideScreen(key: PageStorageKey('aide')),
+    const ProfilScreen(key: PageStorageKey('profil')),
   ];
 
   @override
@@ -33,22 +36,22 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: themeProvider.isDarkMode
           ? CupertinoColors.black
           : CupertinoColors.systemGroupedBackground,
-      child: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: _screens[_currentIndex],
-            ),
-            BottomNavBar(
-              currentIndex: _currentIndex,
-              onTap: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-            ),
-          ],
-        ),
+      child: Column(
+        children: [
+          // Zone principale de contenu qui occupe tout l'espace disponible
+          Expanded(
+            child: _screens[_currentIndex],
+          ),
+          // Barre de navigation unique pour toute l'application
+          BottomNavBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+        ],
       ),
     );
   }
